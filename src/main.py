@@ -1,5 +1,6 @@
 from list import *
 from readCSV import *
+from createCSV import *
 HELP = "help"
 EXIT = "e"
 ERROR = "Unrecognised input"
@@ -36,7 +37,8 @@ def main():
                 print(file)
         elif len(args) == 2:
             if prompt == CREATE:
-                print("do something with creating")
+                fileName = args[1]
+                createFile(fileName)
             elif prompt == WRITE:
                 print("do something with writing")
             elif prompt == READ:
