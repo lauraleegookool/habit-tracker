@@ -1,6 +1,9 @@
+from list import *
+from readCSV import *
 HELP = "help"
 EXIT = "e"
 ERROR = "Unrecognised input"
+INVALID_FILE = "File name not found"
 LIST = "ls"
 CREATE = "c"
 WRITE = "w"
@@ -17,6 +20,7 @@ def help():
     print(writeHelp)
 
 def main():
+    files = []
     print("Hello, welcome to habit tracker. Please enter a command. For help, enter 'help'")
     while(True):
         cmd = input("")
@@ -27,14 +31,20 @@ def main():
         elif prompt == EXIT:
             break
         elif prompt == LIST:
-            print("do something with lists")
+            files = getList()
+            for file in files:
+                print(file)
         elif len(args) == 2:
             if prompt == CREATE:
                 print("do something with creating")
             elif prompt == WRITE:
                 print("do something with writing")
             elif prompt == READ:
-                print("do something with reading")
+                fileName = args[1]
+                if fileName not in files:
+                    print(INVALID_FILE)
+                else:
+                    readFile(fileName)
             else:
                 print(ERROR)
         else:
