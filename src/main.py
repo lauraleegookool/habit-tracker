@@ -1,6 +1,7 @@
 from list import *
 from readCSV import *
 from createCSV import *
+from write import *
 HELP = "help"
 EXIT = "e"
 ERROR = "Unrecognised input"
@@ -10,19 +11,19 @@ CREATE = "c"
 WRITE = "w"
 READ = "r"
 newLine = "\n"
-listHelp = "To view the list of spreadsheets in the current directory, enter 'ls'"
-createHelp = "To create a new spreadsheet, enter 'c <name>' where <name> is the name of the spreadsheet you want to create"
-readHelp = "To read from an existing spreadsheet, enter 'r <name>' where name is the name of the spreadsheet you wish to read"
-writeHelp = "To write data to an existing spreadsheet, enter 'w <name>' where name is the name of the spreadsheet you wish to add to"
+listHelp = "To view the list of spreadsheets in the current directory, enter '{command}'\n"
+createHelp = "To create a new spreadsheet, enter '{command} <name>' where <name> is the name of the spreadsheet you want to create\n"
+readHelp = "To read from an existing spreadsheet, enter '{command} <name>' where name is the name of the spreadsheet you wish to read\n"
+writeHelp = "To write data to an existing spreadsheet, enter '{command} <name>' where name is the name of the spreadsheet you wish to add to\n"
 def help():
-    print(listHelp + newLine)
-    print(createHelp + newLine)
-    print(readHelp + newLine)
-    print(writeHelp)
+    print(listHelp.format(command = LIST))
+    print(createHelp.format(command = CREATE))
+    print(readHelp.format(command = READ))
+    print(writeHelp.format(command = WRITE))
 
 def main():
-    files = []
-    print("Hello, welcome to habit tracker. Please enter a command. For help, enter 'help'")
+    files = getList()
+    print("Hello, welcome to habit tracker. Please enter a command. For help, enter '{0}'. To exit, enter '{1}'".format(HELP, EXIT))
     while(True):
         cmd = input("")
         args = cmd.split(" ")
@@ -32,17 +33,15 @@ def main():
         elif prompt == EXIT:
             break
         elif prompt == LIST:
-            files = getList()
             for file in files:
                 print(file)
         elif len(args) == 2:
+            fileName = args[1]
             if prompt == CREATE:
-                fileName = args[1]
                 createFile(fileName)
             elif prompt == WRITE:
-                print("do something with writing")
+                writeToFile(fileName)
             elif prompt == READ:
-                fileName = args[1]
                 if fileName not in files:
                     print(INVALID_FILE)
                 else:
