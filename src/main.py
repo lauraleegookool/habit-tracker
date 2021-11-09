@@ -6,6 +6,7 @@ HELP = "help"
 EXIT = "e"
 ERROR = "Unrecognised input"
 INVALID_FILE = "File name not found"
+FILE_ALREADY_EXISTS = "File {0} already exists"
 LIST = "ls"
 CREATE = "c"
 WRITE = "w"
@@ -39,8 +40,13 @@ def main():
             fileName = args[1]
             if prompt == CREATE:
                 createFile(fileName)
+                if fileName in files:
+                    print(FILE_ALREADY_EXISTS.format(fileName))
             elif prompt == WRITE:
-                writeToFile(fileName)
+                if fileName not in files:
+                    print(INVALID_FILE)
+                else:
+                    writeToFile(fileName)
             elif prompt == READ:
                 if fileName not in files:
                     print(INVALID_FILE)
