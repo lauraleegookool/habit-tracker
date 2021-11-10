@@ -23,9 +23,9 @@ def help():
     print(writeHelp.format(command = WRITE))
 
 def main():
-    files = getList()
     print("Hello, welcome to habit tracker. Please enter a command. For help, enter '{0}'. To exit, enter '{1}'".format(HELP, EXIT))
     while(True):
+        files = getList()
         cmd = input("")
         args = cmd.split(" ")
         prompt = args[0]
@@ -39,9 +39,10 @@ def main():
         elif len(args) == 2:
             fileName = args[1]
             if prompt == CREATE:
-                createFile(fileName)
                 if fileName in files:
                     print(FILE_ALREADY_EXISTS.format(fileName))
+                else:
+                    createFile(fileName)
             elif prompt == WRITE:
                 if fileName not in files:
                     print(INVALID_FILE)
