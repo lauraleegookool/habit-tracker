@@ -1,8 +1,12 @@
 from datetime import datetime
+from actions import getHabits
+
+INVALID_FORMAT = "Invalid format\n"
+HABIT_NOT_FOUND = "Habit not found. Habits are {0}"
 # method to add data to the specified fileName
 def writeToFile(fileName):
-    habits = ["reading"]
-    prompt = "Please enter a habit you would like to add data to.\nHabits are: {habits}.\nFormat for prompt: a <date> <habit> <+><amount>, where:\n<date> is optional\nMM/DD/YY, <+> adds to current amount in spreadsheet\n<amount> is in minutes\nIf <+> omitted, the current amount will be overwritten\n"
+    habits = getHabits(fileName)
+    prompt = "Please enter a habit you would like to add data to.\nHabits are: {habits}.\nFormat for prompt: <date> <habit> <+><amount>, where:\n<date> is optional\nMM/DD/YY, <+> adds to current amount in spreadsheet\n<amount> is in minutes\nIf <+> omitted, the current amount will be overwritten\n"
     while(True):
         userInput = input(prompt.format(habits = habits))
         if userInput == "e":
@@ -17,10 +21,14 @@ def writeToFile(fileName):
             date = datetime.now().strftime("%x")
             habit = args[0]
             amount = args[1]
+            if habit not in habits:
+                print(HABIT_NOT_FOUND.format(habits))
         elif num == 3:
             # date is entered. need to extract the row of data with date <date>
             date = args[0]
             habit = args[1]
             amount = args[2]
+            if habit not in habits:
+                print(HABIT_NOT_FOUND.format(habits))
         else:
-            print("Invalid format")
+            print("Invalid format\n")

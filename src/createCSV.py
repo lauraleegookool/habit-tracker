@@ -29,6 +29,5 @@ def createFile(fileName):
     initialRow = [today, today]
     for i in range(numOfHabits):
         initialRow.append(0)
-    print(initialRow)
     writer.writerow(initialRow)
     f.close()
