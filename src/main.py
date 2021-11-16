@@ -2,6 +2,7 @@ from list import *
 from readCSV import *
 from createCSV import *
 from write import *
+
 HELP = "help"
 EXIT = "e"
 ERROR = "Unrecognised input"
@@ -16,6 +17,9 @@ listHelp = "To view the list of spreadsheets in the current directory, enter '{c
 createHelp = "To create a new spreadsheet, enter '{command} <name>' where <name> is the name of the spreadsheet you want to create\n"
 readHelp = "To read from an existing spreadsheet, enter '{command} <name>' where name is the name of the spreadsheet you wish to read\n"
 writeHelp = "To write data to an existing spreadsheet, enter '{command} <name>' where name is the name of the spreadsheet you wish to add to\n"
+USER_PROMPT = "Please enter a command. For help, enter '{0}'. To exit, enter '{1}'".format(HELP, EXIT)
+WELCOME = "Hello, welcome to habit tracker!"
+
 def help():
     print(listHelp.format(command = LIST))
     print(createHelp.format(command = CREATE))
@@ -23,8 +27,9 @@ def help():
     print(writeHelp.format(command = WRITE))
 
 def main():
-    print("Hello, welcome to habit tracker. Please enter a command. For help, enter '{0}'. To exit, enter '{1}'".format(HELP, EXIT))
+    print(WELCOME)
     while(True):
+        print(USER_PROMPT)
         files = getList()
         cmd = input("")
         args = cmd.split(" ")
