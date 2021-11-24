@@ -25,7 +25,7 @@ def createFile(fileName):
     writer.writerow(header)
 
     # create the initial row
-    today = datetime.today().strftime('%Y-%m-%d')
+    today = datetime.today().strftime('%x')
     initialRow = [today, today]
     for i in range(numOfHabits):
         initialRow.append(0)

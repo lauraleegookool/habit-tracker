@@ -1,5 +1,5 @@
 from datetime import datetime
-from actions import getHabits
+from actions import getHabits, addDataToFile
 
 INVALID_FORMAT = "Invalid format\n"
 HABIT_NOT_FOUND = "Habit not found. Habits are {0}"
@@ -23,6 +23,8 @@ def writeToFile(fileName):
             amount = args[1]
             if habit not in habits:
                 print(HABIT_NOT_FOUND.format(habits))
+            else:
+                addDataToFile(fileName, habit, amount)
         elif num == 3:
             # date is entered. need to extract the row of data with date <date>
             date = args[0]
@@ -30,5 +32,7 @@ def writeToFile(fileName):
             amount = args[2]
             if habit not in habits:
                 print(HABIT_NOT_FOUND.format(habits))
+            else:
+                addDataToFile(fileName, habit, amount, date)
         else:
             print("Invalid format\n")
