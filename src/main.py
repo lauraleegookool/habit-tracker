@@ -63,9 +63,4 @@ def main():
         else:
             print(ERROR)
 
-# main()
-
-def testWrite():
-    fileName = "lol.csv"
-    writeToFile(fileName)
-testWrite()
+main()

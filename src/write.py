@@ -20,19 +20,21 @@ def writeToFile(fileName):
             # no date entered
             date = datetime.now().strftime("%x")
             habit = args[0]
+            habitIndex = habits.index(habit) + 2
             amount = args[1]
             if habit not in habits:
                 print(HABIT_NOT_FOUND.format(habits))
             else:
-                addDataToFile(fileName, habit, amount)
+                addDataToFile(fileName, habitIndex, amount)
         elif num == 3:
             # date is entered. need to extract the row of data with date <date>
             date = args[0]
             habit = args[1]
+            habitIndex = habits.index(habit) + 2
             amount = args[2]
             if habit not in habits:
                 print(HABIT_NOT_FOUND.format(habits))
             else:
-                addDataToFile(fileName, habit, amount, date)
+                addDataToFile(fileName, habitIndex, amount, date)
         else:
             print("Invalid format\n")
