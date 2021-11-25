@@ -1,5 +1,6 @@
 import csv 
 from datetime import datetime
+from actions import getToday
 
 ENTER_HABITS = "Please enter the list of habits, separated by commas: "
 WEEK_DATE = "Week Date"
@@ -25,7 +26,7 @@ def createFile(fileName):
     writer.writerow(header)
 
     # create the initial row
-    today = datetime.today().strftime('%x')
+    today = getToday()
     initialRow = [today, today]
     for i in range(numOfHabits):
         initialRow.append(0)
