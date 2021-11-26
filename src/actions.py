@@ -18,6 +18,13 @@ def getToday():
     date = str(today).split()[0]
     return date
 
+# returns the week number in year of date 
+# first day of week is monday
+def getWeek(date):
+    date = getDatetime(date)
+    week = date.strftime("%W")
+    return week
+
 # returns a datetime object with given date 
 # requires date to be in the format "YYYY/MM/DD"
 def getDatetime(date):
@@ -27,7 +34,6 @@ def getDatetime(date):
     day = int(dates[2])
     dateObject = datetime(year, month, day)
     return dateObject
-
 
 # searches file (fileName) for the row with date as date
 # returns a dictionary with key and value pairs for rows before the given date,
@@ -45,7 +51,7 @@ def findDateInFile(fileName, date):
             day = r[1]
             date = (getDatetime(day))
             if date == dateObject:
-                dateRow.append(r)
+                dateRow = r
             if date < dateObject:
                 beforeDate.append(r)
             if date > dateObject:
@@ -74,10 +80,6 @@ def addDataToFile(fileName, habit, amount, date = getToday()):
         if lastDate != date and date == getToday():
             # if this is true, simply add a row to the csv file
             appendRow = True
-        else:
-            # loop through csv and find the date. If date not found, add row with data
-            # add remaining rows to csv afterwards
-            print("TODO")
     
     if appendRow:
         with open(fileName, 'a') as f:
@@ -88,3 +90,24 @@ def addDataToFile(fileName, habit, amount, date = getToday()):
                 row.append(0)
             row[habitIndex] = amountToAdd
             writer.writerow(row)
+    else:
+        rowDict = findDateInFile(fileName, date)
+        beforeRow = rowDict["beforeDate"]
+        afterRow = rowDict["afterDate"]
+        rowDate = rowDict["dateRow"]
+        if len(rowDate) > 0:
+            # if this row exists, overwrite/write data 
+            oldAmount = int(rowDate[habitIndex])
+            rowDate[habitIndex] = oldAmount + int(amount)
+        else:
+            # create a new row
+            weekDate = getWeek(date)
+            rowDate = [weekDate, date]
+            for i in habits:
+                rowDate.append(0)
+            rowDate[habitIndex] = amount
+        with open(fileName, 'w') as f:
+            writer = csv.writer(f)
+            writer.writerows(beforeRow)
+            writer.writerow(rowDate)
+            writer.writerows(afterRow)
