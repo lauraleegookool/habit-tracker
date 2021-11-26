@@ -1,14 +1,17 @@
 import csv
 from datetime import datetime
 
+WEEK_INDEX = 0
+DAY_INDEX = 1
+HABITS_INDEX = 2
+
 # function to return the habits in fileName
 # assumes fileName is not empty
 def getHabits(fileName):
-    numNoneHabits = 2
     with open(fileName, 'r') as file:
         reader = csv.reader(file)
         for row in reader:
-            habits = row[numNoneHabits:]
+            habits = row[HABITS_INDEX:]
             return habits
 
 # returns the date of today in the format YYYY/MM/DD
@@ -48,7 +51,7 @@ def findDateInFile(fileName, date):
         header = next(reader)
         beforeDate.append(header)
         for r in reader:
-            day = r[1]
+            day = r[DAY_INDEX]
             date = (getDatetime(day))
             if date == dateObject:
                 dateRow = r
@@ -72,7 +75,7 @@ def findDateInFile(fileName, date):
 def addDataToFile(fileName, habit, amount, date = getToday()):
     appendRow = False
     habits = getHabits(fileName)
-    habitIndex = habits.index(habit) + 2
+    habitIndex = habits.index(habit) + HABITS_INDEX
     amountToAdd = amount
     with open(fileName, "r") as f:
         lastLine = f.readlines()[-1]
@@ -111,3 +114,39 @@ def addDataToFile(fileName, habit, amount, date = getToday()):
             writer.writerows(beforeRow)
             writer.writerow(rowDate)
             writer.writerows(afterRow)
+
+# loops through data and gets the average for each habit in habits
+# returns a dictionary where the key is habit and the value is the average
+def getHabitAverage(data, habits, allHabits):
+    habitAvg = {}
+    count = len(data)
+    for habit in habits:
+        key = habit
+        index = allHabits.index(habit) + HABITS_INDEX
+        total = 0
+        for r in data:
+            amt = int(r[index])
+            total += amt 
+        avg = total/count
+        habitAvg[key] = avg
+    return habitAvg
+
+# gets the average for a given list of habits in csv file over a range of dates 
+# if dates not specified, calculates over all the dates in spreadsheet
+# if only startDate given, calculates for the week that the date is in
+# fileName -> file to extract data from
+# habits -> a list of habits in spreadsheet
+# startDate / endDate -> dates for start and end of the averages 
+# returns a dictionary with the average for each habit
+def getAverages(fileName, habits, startDate = None, endDate = None):
+    avgRows = []
+    habitAvg = {}
+    if not startDate and not endDate:
+        with open(fileName, 'r') as file:
+            reader = csv.reader(file)
+            header = next(reader)
+            for r in reader:
+                avgRows.append(r)
+    allHabits = getHabits(fileName)
+    habitAvg = getHabitAverage(avgRows, habits, allHabits)
+    return (habitAvg)
