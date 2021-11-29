@@ -5,6 +5,26 @@ WEEK_INDEX = 0
 DAY_INDEX = 1
 HABITS_INDEX = 2
 
+# checks that the format of date is valid
+def checkDateFormat(date):
+    length = len(date)
+    if length != 10:
+        return False
+    items = date.split("-")
+    if len(items) != 3:
+        return False
+    if len(items[0]) != 4:
+        return False
+    if len(items[1]) != 2:
+        return False
+    if len(items[2]) != 2:
+        return False
+    if int(items[1]) not in range(1, 13):
+        return False
+    if int(items[2]) not in range(1, 32):
+        return False
+    return True
+
 # function to return the habits in fileName
 # assumes fileName is not empty
 def getHabits(fileName):
@@ -117,9 +137,8 @@ def addDataToFile(fileName, habit, amount, date = getToday()):
 
 # loops through data and gets the average for each habit in habits
 # returns a dictionary where the key is habit and the value is the average
-def getHabitAverage(data, habits, allHabits):
+def getHabitAverage(data, habits, allHabits, count):
     habitAvg = {}
-    count = len(data)
     for habit in habits:
         key = habit
         index = allHabits.index(habit) + HABITS_INDEX
@@ -127,7 +146,7 @@ def getHabitAverage(data, habits, allHabits):
         for r in data:
             amt = int(r[index])
             total += amt 
-        avg = total/count
+        avg = total//count
         habitAvg[key] = avg
     return habitAvg
 
@@ -142,11 +161,25 @@ def getAverages(fileName, habits, startDate = None, endDate = None):
     avgRows = []
     habitAvg = {}
     if not startDate and not endDate:
+        # get all averages
         with open(fileName, 'r') as file:
             reader = csv.reader(file)
             header = next(reader)
             for r in reader:
                 avgRows.append(r)
+        count = len(avgRows)
+    elif startDate and not endDate:
+        # get averages for a week
+        weekDate = getWeek(startDate)
+        with open(fileName, 'r') as file:
+            reader = csv.reader(file)
+            header = next(reader)
+            avgRows = []
+            count = 7
+            for r in reader:
+                week = r[WEEK_INDEX]
+                if week == weekDate:
+                    avgRows.append(r)
     allHabits = getHabits(fileName)
-    habitAvg = getHabitAverage(avgRows, habits, allHabits)
+    habitAvg = getHabitAverage(avgRows, habits, allHabits, count)
     return (habitAvg)

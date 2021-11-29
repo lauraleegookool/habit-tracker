@@ -1,4 +1,7 @@
-from actions import getAverages, getHabits
+from actions import getAverages, getHabits, checkDateFormat
+
+INVALID_FORMAT = "Invalid format"
+INVALID_DATE_FORMAT = "Invalid date format. Dates are in the format YYYY-MM-DD"
 
 def getPrompts():
     # COMMANDS
@@ -23,6 +26,15 @@ def getPrompts():
     print(habit_avg_in_week_prompt.format(prompt=habit_avg_in_week))
     print(formatting_prompt.format(prompt = formatting))
 
+def printAverages(avgs):
+    keys = list(avgs.keys())
+    vals = list(avgs.values())
+    i = 0
+    for k in keys:
+        val = vals[i]
+        print("{0}: {1}".format(k, val))
+        i += 1
+
 # function to open the file fileName and producing summaries of the data in the file
 def readFile(fileName):
     habits = getHabits(fileName)
@@ -31,22 +43,31 @@ def readFile(fileName):
         userInput = input("Please enter a command: \n")
         if userInput == "e":
             break
-        if userInput == "h":
+        if userInput == "help":
             getPrompts()
-
         args = userInput.split()
         if len(args) == 2:
             # get average over all habits for all dates
             avgs = getAverages(fileName, habits)
-            keys = list(avgs.keys())
-            vals = list(avgs.values())
-            i = 0
-            for k in keys:
-                val = vals[i]
-                print("{0}: {1}".format(k, val))
-                i += 1
+            printAverages(avgs)
         elif len(args) == 4:
-            print("TODO")
+            secondArg = args[1]
+            thirdArg = args[2]
+            fourthArg = args[3] # should always be a date
+            if not checkDateFormat(fourthArg):
+                print(INVALID_DATE_FORMAT)
+            # check if weekly
+            elif thirdArg == "w":
+                weekDate = fourthArg
+                if secondArg == "a":
+                    avgs = getAverages(fileName, habits, weekDate)
+                    printAverages(avgs)
+                elif secondArg in habits:
+                    habit = [secondArg]
+                    avgs = getAverages(fileName, habit, weekDate)
+                    printAverages(avgs)
+            else:
+                print(INVALID_FORMAT)
         else:
-            print("Invalid format")
+            print(INVALID_FORMAT)
     
