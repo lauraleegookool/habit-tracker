@@ -180,6 +180,19 @@ def getAverages(fileName, habits, startDate = None, endDate = None):
                 week = r[WEEK_INDEX]
                 if week == weekDate:
                     avgRows.append(r)
+    else:
+        # startDate and endDate both exist
+        start = getDatetime(startDate)
+        end = getDatetime(endDate)
+        count = (end - start).days + 1
+        with open(fileName, "r") as file:
+            reader = csv.reader(file)
+            next(reader)
+            avgRows = []
+            for r in reader:
+                day = getDatetime(r[DAY_INDEX])
+                if day >= start and day <= end:
+                    avgRows.append(r)
     allHabits = getHabits(fileName)
     habitAvg = getHabitAverage(avgRows, habits, allHabits, count)
     return (habitAvg)
