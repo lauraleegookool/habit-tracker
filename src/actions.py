@@ -184,7 +184,7 @@ def getAverages(fileName, habits, startDate = None, endDate = None):
         # startDate and endDate both exist
         start = getDatetime(startDate)
         end = getDatetime(endDate)
-        count = (end - start).days
+        count = (end - start).days + 1
         with open(fileName, "r") as file:
             reader = csv.reader(file)
             next(reader)

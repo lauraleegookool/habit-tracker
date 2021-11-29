@@ -66,6 +66,17 @@ def readFile(fileName):
                     habit = [secondArg]
                     avgs = getAverages(fileName, habit, weekDate)
                     printAverages(avgs)
+            elif checkDateFormat(thirdArg):
+                # if thid arg is a date, then we calculate for a range
+                startDate = thirdArg
+                endDate = fourthArg
+                if secondArg == "a":
+                    avgs = getAverages(fileName, habits, startDate, endDate)
+                    printAverages(avgs)
+                elif secondArg in habits:
+                    habit = [secondArg]
+                    avgs = getAverages(fileName, habit, startDate, endDate)
+                    printAverages(avgs)
             else:
                 print(INVALID_FORMAT)
         else:
